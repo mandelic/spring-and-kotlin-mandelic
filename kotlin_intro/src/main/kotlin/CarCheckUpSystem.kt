@@ -23,33 +23,23 @@ object CarCheckUpSystem{
         )
     }
 
-    fun isCheckUpNecessary(vin: String):Boolean? {
+    fun isCheckUpNecessary(vin: String):Boolean {
         val today = LocalDateTime.now()
         return checkUps.none {it.car.vin == vin && it.performedAt.isAfter(today.minusYears(1))}
     }
 
-    fun addCheckUp(vin: String):CheckUp? {
-        return try {
-            val vinCar = cars.firstOrNull {it.vin == vin}
-            vinCar ?: throw Exception("There is no car with a given VIN")
-            val newCheckUp = CheckUp(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), vinCar)
-            checkUps.add(newCheckUp)
-            newCheckUp
-        } catch (e: Exception) {
-            println(e)
-            null
-        }
+    fun addCheckUp(vin: String): CheckUp {
+        val vinCar = cars.firstOrNull { it.vin == vin }
+        vinCar ?: throw Exception("There is no car with a given VIN")
+        val newCheckUp = CheckUp(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), vinCar)
+        checkUps.add(newCheckUp)
+        return newCheckUp
     }
 
     fun getCheckUps(vin:String):List<CheckUp>? {
-        return try {
-            val vinCheckUps = checkUps.filter { it.car.vin == vin }
-            if (vinCheckUps.isEmpty() && cars.none{it.vin == vin}) throw Exception("There is no car with a given VIN")
-            vinCheckUps
-        } catch (e: Exception) {
-            println(e)
-            null
-        }
+        val vinCheckUps = checkUps.filter { it.car.vin == vin }
+        if (vinCheckUps.isEmpty() && cars.none{it.vin == vin}) throw Exception("There is no car with a given VIN")
+        return vinCheckUps
     }
 
     fun countCheckUps(manufacturer: String):Int = checkUps.count {it.car.manufacturer == manufacturer}
