@@ -50,7 +50,7 @@ class InFileCarCheckUpRepository(
         com.example.CarCheckUpNotFoundException(id)
     }
 
-    override fun getCheckUps(): Map<Long, com.example.CarCheckUp> {
+    override fun getAllCheckUps(): Map<Long, com.example.CarCheckUp> {
         return carCheckUpsFileResource.file.readLines()
             .map { line -> line.convertToCarCheckUp() }
             .associateBy { it.id }
