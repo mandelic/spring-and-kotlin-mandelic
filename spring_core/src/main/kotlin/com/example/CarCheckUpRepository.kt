@@ -1,3 +1,5 @@
+package com.example
+
 import java.time.LocalDateTime
 
 interface CarCheckUpRepository {
