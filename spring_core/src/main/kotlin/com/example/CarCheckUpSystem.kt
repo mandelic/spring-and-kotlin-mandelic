@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit
 
 @Service
 class CarCheckUpSystem (@Qualifier("inMemoryCarCheckUpRepository") val carCheckUpRepository: CarCheckUpRepository,
-                        @Qualifier("inMemoryCarRepository") val carRepository: CarRepository) {
+                        val carRepository: CarRepository) {
 
     fun isCheckUpNecessary(vin: String):Boolean {
         val today = LocalDateTime.now()
