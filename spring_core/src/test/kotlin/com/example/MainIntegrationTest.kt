@@ -8,9 +8,10 @@ import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
-
-@ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [ApplicationConfig::class])
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
+//@ExtendWith(SpringExtension::class)
+//@ContextConfiguration(classes = [ApplicationConfig::class])
+@SpringJUnitConfig(classes = [ApplicationConfig::class])
 @TestPropertySource(locations=["classpath:test2.properties"])
 class MainIntegrationTest @Autowired constructor(private var applicationContext: ApplicationContext,
                                                  private val carCheckUpSystem: CarCheckUpSystem,

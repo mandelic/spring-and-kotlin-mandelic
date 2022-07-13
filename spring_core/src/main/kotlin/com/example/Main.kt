@@ -2,9 +2,11 @@ package com.example
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
+import org.springframework.core.io.FileSystemResource
 
 fun main() {
     val applicationContext: ApplicationContext = AnnotationConfigApplicationContext(ApplicationConfig::class.java)
@@ -20,4 +22,8 @@ fun main() {
 @Configuration
 @ComponentScan
 @PropertySource("classpath:application.properties")
-class ApplicationConfig
+class ApplicationConfig {
+    @Bean
+    fun fileSystemResource(): FileSystemResource = FileSystemResource("C:/")
+
+}

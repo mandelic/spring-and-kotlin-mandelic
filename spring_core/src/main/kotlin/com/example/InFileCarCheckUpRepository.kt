@@ -1,23 +1,20 @@
 package com.example
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.io.Resource
-import org.springframework.stereotype.Component
+import org.springframework.core.io.FileSystemResource
 import org.springframework.stereotype.Repository
 import java.io.FileOutputStream
 import java.time.LocalDateTime
 
 @Repository
 class InFileCarCheckUpRepository(
-    @Value("\${Resource}")
-    private val carCheckUpsFileResource: Resource,
+    private val carCheckUpsFileResource: FileSystemResource,
 
-) : com.example.CarCheckUpRepository {
+    ) : CarCheckUpRepository {
     init {
         if (carCheckUpsFileResource.exists().not()) {
             carCheckUpsFileResource.file.createNewFile()
         }
     }
-    override fun insert(performedAt: LocalDateTime, car: com.example.Car): Long {
+    override fun insert(performedAt: LocalDateTime, car: Car): Long {
         val file = carCheckUpsFileResource.file
         val id = (file.readLines()
             .filter { it.isNotEmpty() }.maxOfOrNull { line ->
@@ -25,14 +22,14 @@ class InFileCarCheckUpRepository(
         file.appendText("$id,${car.vin},${car.manufacturer},${car.model},$performedAt\n")
         return id
     }
-    override fun findById(id: Long): com.example.CarCheckUp {
+    override fun findById(id: Long): CarCheckUp {
         return carCheckUpsFileResource.file.readLines()
             .filter { it.isNotEmpty() }
             .find { line -> line.split(",").first().toLong() == id }
             ?.convertToCarCheckUp()
-            ?: throw com.example.CarCheckUpNotFoundException(id)
+            ?: throw CarCheckUpNotFoundException(id)
     }
-    override fun deleteById(id: Long): com.example.CarCheckUp {
+    override fun deleteById(id: Long): CarCheckUp {
         val checkUpLines = carCheckUpsFileResource.file.readLines()
         var lineToDelete: String? = null
         FileOutputStream(carCheckUpsFileResource.file)
@@ -47,21 +44,21 @@ class InFileCarCheckUpRepository(
                 }
             }
         return lineToDelete?.convertToCarCheckUp() ?: throw
-        com.example.CarCheckUpNotFoundException(id)
+        CarCheckUpNotFoundException(id)
     }
 
-    override fun getAllCheckUps(): Map<Long, com.example.CarCheckUp> {
+    override fun getAllCheckUps(): Map<Long, CarCheckUp> {
         return carCheckUpsFileResource.file.readLines()
             .map { line -> line.convertToCarCheckUp() }
             .associateBy { it.id }
     }
 
-    private fun String.convertToCarCheckUp(): com.example.CarCheckUp {
+    private fun String.convertToCarCheckUp(): CarCheckUp {
         val tokens = split(",")
-        return com.example.CarCheckUp(
+        return CarCheckUp(
             id = tokens[0].toLong(),
             performedAt = LocalDateTime.parse(tokens[4]),
-            car = com.example.Car(
+            car = Car(
                 vin = tokens[1],
                 manufacturer = tokens[2],
                 model = tokens[3]

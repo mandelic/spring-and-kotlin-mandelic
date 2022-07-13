@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 @Component
 data class DataSource(
-    @Value("\${dbName}") val dbName: String,
-    @Value("\${username}") val username: String,
-    @Value("\${password}") val password: String
+    @Value("\${database.name}") val dbName: String,
+    @Value("\${database.username}") val username: String,
+    @Value("\${database.password}") val password: String
 )

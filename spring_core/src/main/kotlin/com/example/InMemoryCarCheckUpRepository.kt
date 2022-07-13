@@ -9,8 +9,8 @@ import java.time.LocalDateTime
 @Repository
 class InMemoryCarCheckUpRepository (private val dataSource: DataSource)
 
-    : com.example.CarCheckUpRepository {
-    private val carCheckUpMap = mutableMapOf<Long, com.example.CarCheckUp>()
+    : CarCheckUpRepository {
+    private val carCheckUpMap = mutableMapOf<Long, CarCheckUp>()
     private val cars = mutableListOf(
     Car("Porsche", "Taycan", "4T1BE46K19U448615"),
     Car("Audi", "A8", "1C4PJMDB6FW698828"),
@@ -34,17 +34,17 @@ class InMemoryCarCheckUpRepository (private val dataSource: DataSource)
     }
 
 
-    override fun insert(performedAt: LocalDateTime, car: com.example.Car): Long {
+    override fun insert(performedAt: LocalDateTime, car: Car): Long {
         val id = (carCheckUpMap.keys.maxOrNull() ?: 0) + 1
-        carCheckUpMap[id] = com.example.CarCheckUp(id = id, performedAt = performedAt, car = car)
+        carCheckUpMap[id] = CarCheckUp(id = id, performedAt = performedAt, car = car)
         return id
     }
-    override fun findById(id: Long): com.example.CarCheckUp {
-        return carCheckUpMap[id] ?: throw com.example.CarCheckUpNotFoundException(id)
+    override fun findById(id: Long): CarCheckUp {
+        return carCheckUpMap[id] ?: throw CarCheckUpNotFoundException(id)
     }
-    override fun deleteById(id: Long): com.example.CarCheckUp {
-        return carCheckUpMap.remove(id) ?: throw com.example.CarCheckUpNotFoundException(id)
+    override fun deleteById(id: Long): CarCheckUp {
+        return carCheckUpMap.remove(id) ?: throw CarCheckUpNotFoundException(id)
     }
 
-    override fun getAllCheckUps(): MutableMap<Long, com.example.CarCheckUp> = carCheckUpMap
+    override fun getAllCheckUps(): MutableMap<Long, CarCheckUp> = carCheckUpMap
 }

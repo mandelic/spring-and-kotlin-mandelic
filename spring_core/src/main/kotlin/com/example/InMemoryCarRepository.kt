@@ -4,9 +4,9 @@ import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 
 @Repository
-class InMemoryCarRepository : com.example.CarRepository{
+class InMemoryCarRepository : CarRepository{
 
-    private val carMap = mutableMapOf<String, com.example.Car>()
+    private val carMap = mutableMapOf<String, Car>()
     init {
         carMap["4T1BE46K19U448615"] = Car("Porsche", "Taycan", "4T1BE46K19U448615")
         carMap["1C4PJMDB6FW698828"] = Car("Audi", "A8", "1C4PJMDB6FW698828")
@@ -15,19 +15,19 @@ class InMemoryCarRepository : com.example.CarRepository{
     }
 
     override fun insert(manufacturer: String, model: String, vin: String): Boolean {
-        carMap[vin] = com.example.Car(manufacturer, model, vin)
+        carMap[vin] = Car(manufacturer, model, vin)
         return true
     }
 
-    override fun findByVin(vin: String): com.example.Car {
-        return carMap[vin] ?: throw com.example.CarNotFoundException(vin)
+    override fun findByVin(vin: String): Car {
+        return carMap[vin] ?: throw CarNotFoundException(vin)
     }
 
-    override fun deleteByVin(vin: String): com.example.Car {
-        return carMap.remove(vin) ?: throw com.example.CarNotFoundException(vin)
+    override fun deleteByVin(vin: String): Car {
+        return carMap.remove(vin) ?: throw CarNotFoundException(vin)
     }
 
-    override fun findAll(): List<com.example.Car> = carMap.toList().map{it.second}
+    override fun findAll(): List<Car> = carMap.toList().map{it.second}
 
 
 }

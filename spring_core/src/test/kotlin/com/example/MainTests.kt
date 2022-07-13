@@ -14,10 +14,7 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDateTime
 
-@ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [ApplicationConfig::class])
-@TestPropertySource(locations=["classpath:test1.properties"])
-class MainTests @Autowired constructor(private val dataSource: DataSource){
+class MainTests @Autowired constructor(){
     lateinit var carCheckUpSystem: CarCheckUpSystem
     private val inMemoryCarRepository = mockk<InMemoryCarRepository>()
     private val inMemoryCarCheckUpRepository = mockk<InMemoryCarCheckUpRepository>()
@@ -28,15 +25,6 @@ class MainTests @Autowired constructor(private val dataSource: DataSource){
         carCheckUpSystem= CarCheckUpSystem(inMemoryCarCheckUpRepository, inMemoryCarRepository)
     }
 
-    @Test
-    fun testProperty1() {
-        val dbnameTest = dataSource.dbName
-        val usernameTest = dataSource.username
-        val passwordTest = dataSource.password
-        assertThat(dbnameTest).isEqualTo("nova")
-        assertThat(usernameTest).isEqualTo("nova user")
-        assertThat(passwordTest).isEqualTo("nova pass")
-    }
 
     @Test
     fun getCheckUps() {
