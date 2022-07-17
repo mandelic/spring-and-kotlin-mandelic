@@ -1,6 +1,7 @@
 package com.example.project.carCheckUpSystem.service
 
 import com.example.project.carCheckUpSystem.car.Car
+import com.example.project.carCheckUpSystem.car.CarDetails
 import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
 import com.example.project.carCheckUpSystem.exceptions.CarNotFoundException
 import com.example.project.carCheckUpSystem.repository.CarCheckUpRepository
@@ -42,5 +43,12 @@ class CarCheckUpSystem (val carCheckUpRepository: CarCheckUpRepository,
     fun countCheckUps(manufacturer: String): Int {
         val carList = carRepository.findAll().filter {it.manufacturer == manufacturer}
         return carList.sumOf {it.carCheckUpList.count()}
+    }
+
+    fun getCarDetails(vin: String): CarDetails {
+        val car = carRepository.findAll().first {it.vin == vin}
+        val checkUpNecessary = isCheckUpNecessary(vin)
+        val carCheckUpList = getCheckUps(vin).sortedByDescending { it.performedAt }
+        return CarDetails(car, checkUpNecessary, carCheckUpList)
     }
 }

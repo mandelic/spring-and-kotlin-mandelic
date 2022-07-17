@@ -28,7 +28,6 @@ class CarCheckUpController(private val carCheckUpSystem: CarCheckUpSystem) {
     }
 
     @ExceptionHandler(CarNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleCarNotFoundException(exception: CarNotFoundException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
     }
@@ -36,7 +35,7 @@ class CarCheckUpController(private val carCheckUpSystem: CarCheckUpSystem) {
 
     @GetMapping("/get-car")
     @ResponseBody
-    fun getCar(@RequestParam vin: String): CarDetails = CarDetails(carCheckUpSystem, vin)
+    fun getCar(@RequestParam vin: String): CarDetails = carCheckUpSystem.getCarDetails(vin)
 
     @GetMapping("/count-check-ups")
     @ResponseBody
