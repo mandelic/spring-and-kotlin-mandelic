@@ -3,6 +3,7 @@ package com.example.project.carCheckUpSystem.controller
 import com.example.project.carCheckUpSystem.car.Car
 import com.example.project.carCheckUpSystem.car.CarDetails
 import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
+import com.example.project.carCheckUpSystem.exceptions.CarNotFoundException
 import com.example.project.carCheckUpSystem.service.CarCheckUpSystem
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -21,15 +22,15 @@ class CarCheckUpController(private val carCheckUpSystem: CarCheckUpSystem) {
 
     @PostMapping("/add-car-check-up")
     @ResponseBody
-    fun addCarCheckUp(@RequestBody carCheckUp: CarCheckUp): ResponseEntity<String> {
-        return try {
-            val newCarCheckUp = carCheckUpSystem.addCarCheckUp(carCheckUp)
-            ResponseEntity(newCarCheckUp.toString(), HttpStatus.OK)
-        } catch (e: java.lang.Exception) {
-            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
-        }
+    fun addCarCheckUp(@RequestBody carCheckUp: CarCheckUp): ResponseEntity<CarCheckUp> {
+        val newCarCheckUp = carCheckUpSystem.addCarCheckUp(carCheckUp)
+        return ResponseEntity(newCarCheckUp, HttpStatus.OK)
+    }
 
-
+    @ExceptionHandler(CarNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleCarNotFoundException(exception: CarNotFoundException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
     }
 
 
