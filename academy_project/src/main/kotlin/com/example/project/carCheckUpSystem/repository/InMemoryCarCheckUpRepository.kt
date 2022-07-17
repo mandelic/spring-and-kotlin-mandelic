@@ -1,10 +1,8 @@
-package com.example.project.carcheckup.repository
+package com.example.project.carCheckUpSystem.repository
 
-import com.example.project.carcheckup.entity.Car
-import com.example.project.carcheckup.entity.CarCheckUp
-import com.example.project.carcheckup.exceptions.CarCheckUpNotFoundException
+import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
+import com.example.project.carCheckUpSystem.exceptions.CarCheckUpNotFoundException
 import org.springframework.stereotype.Repository
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Repository
@@ -24,15 +22,9 @@ class InMemoryCarCheckUpRepository : CarCheckUpRepository {
         carCheckUpMap[10] = CarCheckUp(10, LocalDateTime.of(2020, 9,21,20,30), "Mark",1000,2)
     }
 
-
-    override fun insertData(performedAt: LocalDateTime, workerName: String, price: Long, carId: Long): Long {
+    override fun insertCarCheckUp(carCheckUp: CarCheckUp): CarCheckUp {
         val id = (carCheckUpMap.keys.maxOrNull() ?: 0) + 1
-        carCheckUpMap[id] = CarCheckUp(id = id, performedAt = performedAt, workerName = workerName, price = price, carId = carId)
-        return id
-    }
-
-    override fun insertCarCheckUp(carCheckUp: CarCheckUp): CarCheckUp{
-        val id = (carCheckUpMap.keys.maxOrNull() ?: 0) + 1
+        carCheckUp.id = id
         carCheckUpMap[id] = carCheckUp
         return carCheckUp
     }

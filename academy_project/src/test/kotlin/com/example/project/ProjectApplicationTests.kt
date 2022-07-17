@@ -1,11 +1,10 @@
 package com.example.project
 
-import com.example.project.carcheckup.service.CarCheckUpSystem
+import com.example.project.carCheckUpSystem.service.CarCheckUpSystem
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.ResponseEntity.status
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 

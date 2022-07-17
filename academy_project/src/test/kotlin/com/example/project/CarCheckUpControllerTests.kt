@@ -1,7 +1,7 @@
 package com.example.project
 
-import com.example.project.carcheckup.entity.CarCheckUp
-import com.example.project.carcheckup.service.CarCheckUpSystem
+import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
+import com.example.project.carCheckUpSystem.service.CarCheckUpSystem
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.BeforeEach

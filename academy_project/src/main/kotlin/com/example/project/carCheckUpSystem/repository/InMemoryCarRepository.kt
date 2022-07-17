@@ -1,12 +1,11 @@
-package com.example.project.carcheckup.repository
+package com.example.project.carCheckUpSystem.repository
 
-import com.example.project.carcheckup.entity.Car
-import com.example.project.carcheckup.entity.CarCheckUp
-import com.example.project.carcheckup.exceptions.CarNotFoundException
+import com.example.project.carCheckUpSystem.car.Car
+import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
+import com.example.project.carCheckUpSystem.exceptions.CarNotFoundException
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Year
 
 @Repository
 class InMemoryCarRepository : CarRepository{
@@ -37,12 +36,6 @@ class InMemoryCarRepository : CarRepository{
             ))
     }
 
-    override fun insertData(dateAdded: LocalDate, manufacturer: String, model: String, productionYear: Int, vin: String): Long {
-        val id = (carMap.keys.maxOrNull() ?: 0) + 1
-        carMap[id] = Car(id = id, dateAdded = dateAdded, manufacturer = manufacturer, model = model, productionYear = productionYear, vin = vin, carCheckUpList = mutableListOf<CarCheckUp>())
-        return id
-    }
-
     override fun findById(id: Long): Car {
         return carMap[id] ?: throw CarNotFoundException(id)
     }
@@ -53,8 +46,9 @@ class InMemoryCarRepository : CarRepository{
 
     override fun findAll(): List<Car> = carMap.toList().map{it.second}
 
-    override fun insertCar(car: Car): Car{
+    override fun insertCar(car: Car): Car {
         val id = (carMap.keys.maxOrNull() ?: 0) + 1
+        car.id = id
         carMap[id] = car
         return car
     }
