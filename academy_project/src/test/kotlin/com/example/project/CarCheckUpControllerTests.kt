@@ -20,9 +20,9 @@ class CarCheckUpControllerTests {
     @MockkBean
     private lateinit var carCheckUpSystem: CarCheckUpSystem
 
-    private val carCheckUps = mutableMapOf(
-        55L to CarCheckUp(55, LocalDateTime.of(2020, 12, 5, 12, 4), "Amanda", 1250, 2),
-        56L to CarCheckUp(56, LocalDateTime.of(2022, 7,13,12,1), "Colleen", 700, 1)
+    private val carCheckUps = mutableListOf(
+        CarCheckUp(55, LocalDateTime.of(2020, 12, 5, 12, 4), "Amanda", 1250, 2),
+        CarCheckUp(56, LocalDateTime.of(2022, 7,13,12,1), "Colleen", 700, 1)
     )
 
     @BeforeEach

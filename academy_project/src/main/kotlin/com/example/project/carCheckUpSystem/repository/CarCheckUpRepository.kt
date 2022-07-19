@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 interface CarCheckUpRepository {
     fun insertCarCheckUp(carCheckUp: CarCheckUp): CarCheckUp
-    fun findById(id: Long): CarCheckUp
-    fun deleteById(id: Long): CarCheckUp
-    fun getAllCheckUps(): Map<Long, CarCheckUp>
+    fun findById(id: Long): CarCheckUp?
+    fun deleteById(id: Long): Int
+    fun getAllCheckUps(): List<CarCheckUp>
 }
