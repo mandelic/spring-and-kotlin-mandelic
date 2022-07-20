@@ -10,5 +10,5 @@ data class Car(
     val model: String,
     val productionYear: Int,
     val vin: String,
-    val carCheckUpList: MutableList<CarCheckUp> = mutableListOf<CarCheckUp>()
+    //val carCheckUpList: MutableList<CarCheckUp> = mutableListOf<CarCheckUp>()
 )

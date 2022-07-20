@@ -15,14 +15,28 @@ repositories {
 	mavenCentral()
 }
 
+extra["testcontainersVersion"] = "1.17.3"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+	implementation("org.flywaydb:flyway-core")
+	runtimeOnly("org.postgresql:postgresql")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("com.ninja-squad:springmockk:3.1.1")
+	testImplementation("org.testcontainers:postgresql")
 }
+
+dependencyManagement {
+	imports {
+		mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+	}
+}
+
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {

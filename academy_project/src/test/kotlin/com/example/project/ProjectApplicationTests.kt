@@ -38,4 +38,24 @@ class ProjectApplicationTests {
 			}
 	}
 
+	@Test
+	fun testCountCheckUps() {
+		val expectedCount = carCheckUpSystem.countCheckUps("Porsche")
+		mockMvc.get("/count-check-ups")
+			.andExpect {
+				status { is2xxSuccessful() }
+				content { expectedCount}
+			}
+	}
+
+	@Test
+	fun testGetCarDetails() {
+		val expectedDetails = carCheckUpSystem.getCarDetails(vin="vin1")
+		mockMvc.get("/get-car-details?vin=vin1")
+			.andExpect {
+				status { is2xxSuccessful() }
+				content { expectedDetails }
+			}
+	}
+
 }

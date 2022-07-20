@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 interface CarRepository {
     fun insertCar(car: Car): Car
-    fun findById(id: Long): Car
-    fun deleteById(id: Long): Car
+    fun findById(id: Long): Car?
+    fun findByVin(vin: String): Car?
     fun findAll(): List<Car>
-    fun addCarCheckUp(id: Long, carCheckUp: CarCheckUp): Boolean?
+    fun deleteById(id: Long): Int
 }
