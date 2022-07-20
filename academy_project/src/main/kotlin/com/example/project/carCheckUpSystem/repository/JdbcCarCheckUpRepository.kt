@@ -43,4 +43,10 @@ class JdbcCarCheckUpRepository(
         return jdbcTemplate.query("SELECT * FROM checkups",
                                     CarCheckUpRowMapper())
     }
+
+    override fun getCheckUpsByVin(vin: String): List<CarCheckUp> {
+        return jdbcTemplate.query("SELECT ch.id, ch.performedAt, ch.workerName, ch.price, ch.carId FROM cars JOIN checkups ch ON cars.id = ch.carId WHERE vin = :vin",
+            mapOf("vin" to vin),
+            CarCheckUpRowMapper())
+    }
 }

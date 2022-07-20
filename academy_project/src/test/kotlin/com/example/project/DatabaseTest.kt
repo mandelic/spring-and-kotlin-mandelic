@@ -17,7 +17,6 @@ import java.time.LocalDate
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Commit
 class DatabaseTest {
     @Autowired
     lateinit var jdbcTemplate: NamedParameterJdbcTemplate
@@ -30,15 +29,7 @@ class DatabaseTest {
                   "manufacturer" to "man",
                   "model" to "mod",
                   "productionYear" to 2020,
-                  "vin" to "vinTest15")
-        )
-    }
-
-    @AfterEach
-    fun delete() {
-        jdbcTemplate.update(
-            "DELETE FROM cars WHERE vin = :vin",
-            mapOf("vin" to "vinTest15")
+                  "vin" to "vinTest20")
         )
     }
 
@@ -47,10 +38,10 @@ class DatabaseTest {
         Assertions.assertThat(
             jdbcTemplate.queryForObject(
                 "SELECT vin FROM cars WHERE vin = :vin ",
-                mapOf("vin" to "vinTest15"),
+                mapOf("vin" to "vinTest20"),
                 String::class.java
             )
-        ).isEqualTo("vinTest15")
+        ).isEqualTo("vinTest20")
     }
 
     @Test
@@ -58,7 +49,7 @@ class DatabaseTest {
         Assertions.assertThat(
             jdbcTemplate.queryForObject(
                 "SELECT count(*) FROM cars WHERE vin = :vin",
-                mapOf("vin" to "vinTest15"),
+                mapOf("vin" to "vinTest20"),
                 Int::class.java
             )
         ).isEqualTo(1)

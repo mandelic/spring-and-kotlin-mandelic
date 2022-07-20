@@ -10,5 +10,4 @@ interface CarRepository {
     fun findByVin(vin: String): Car?
     fun findAll(): List<Car>
     fun deleteById(id: Long): Int
-    fun getCheckUps(vin: String): List<CarCheckUp>
 }

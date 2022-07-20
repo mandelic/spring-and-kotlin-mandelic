@@ -6,7 +6,7 @@ import java.sql.ResultSet
 import java.time.LocalDate
 
 class CarRowMapper: RowMapper<Car> {
-    override fun mapRow(rs: ResultSet, rowNum: Int): Car? {
+    override fun mapRow(rs: ResultSet, rowNum: Int): Car {
         return Car(rs.getLong("id"),
         LocalDate.parse(rs.getString("dateadded")),
         rs.getString("manufacturer"),

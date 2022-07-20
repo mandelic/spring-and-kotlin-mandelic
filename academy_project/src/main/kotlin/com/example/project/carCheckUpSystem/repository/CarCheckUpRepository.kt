@@ -8,4 +8,5 @@ interface CarCheckUpRepository {
     fun findById(id: Long): CarCheckUp?
     fun deleteById(id: Long): Int
     fun getAllCheckUps(): List<CarCheckUp>
+    fun getCheckUpsByVin(vin: String): List<CarCheckUp>
 }

@@ -2,9 +2,12 @@ package com.example.project.carCheckUpSystem.repository
 
 import com.example.project.carCheckUpSystem.car.Car
 import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
+import com.example.project.carCheckUpSystem.exceptions.CarIdNotFoundException
+import com.example.project.carCheckUpSystem.exceptions.CarVinNotFoundException
 import com.example.project.carCheckUpSystem.repository.rowmapper.CarCheckUpRowMapper
 import com.example.project.carCheckUpSystem.repository.rowmapper.CarRowMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.BeanPropertyRowMapper
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -31,36 +34,29 @@ class JdbcCarRepository(
 
 
     override fun findById(id: Long): Car? {
-        return jdbcTemplate.queryForObject(
+        return try {jdbcTemplate.queryForObject(
             "SELECT * FROM cars WHERE id = :id",
             mapOf("id" to id),
             CarRowMapper()
-        )
+        )} catch (e: EmptyResultDataAccessException) { return null }
     }
 
     override fun findByVin(vin: String): Car? {
-        return jdbcTemplate.queryForObject(
+        return try { jdbcTemplate.queryForObject(
             "SELECT * FROM cars WHERE vin = :vin",
             mapOf("vin" to vin),
             CarRowMapper()
-        )
+        )} catch(e: EmptyResultDataAccessException) { return null }
     }
 
     override fun deleteById(id: Long): Int {
-        return jdbcTemplate.update("DELETE FROM cars" +
-                                "WHERE id = :id",
+        return jdbcTemplate.update("DELETE FROM cars WHERE id = :id",
                                 mapOf("id" to id))
     }
 
     override fun findAll(): List<Car> {
         return jdbcTemplate.query("SELECT * FROM cars",
         CarRowMapper())
-    }
-
-    override fun getCheckUps(vin: String): List<CarCheckUp> {
-        return jdbcTemplate.query("SELECT ch.id, ch.performedat, ch.workername, ch.price, ch.carid FROM cars JOIN checkups ch ON cars.id = ch.carid WHERE vin = :vin",
-                                    mapOf("vin" to vin),
-                                CarCheckUpRowMapper())
     }
 
 }

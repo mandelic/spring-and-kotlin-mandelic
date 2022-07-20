@@ -3,7 +3,8 @@ package com.example.project.carCheckUpSystem.controller
 import com.example.project.carCheckUpSystem.car.Car
 import com.example.project.carCheckUpSystem.car.CarDetails
 import com.example.project.carCheckUpSystem.carCheckUp.CarCheckUp
-import com.example.project.carCheckUpSystem.exceptions.CarNotFoundException
+import com.example.project.carCheckUpSystem.exceptions.CarIdNotFoundException
+import com.example.project.carCheckUpSystem.exceptions.CarVinNotFoundException
 import com.example.project.carCheckUpSystem.exceptions.VinNotUniqueException
 import com.example.project.carCheckUpSystem.service.CarCheckUpSystem
 import org.springframework.http.HttpStatus
@@ -18,26 +19,16 @@ class CarCheckUpController(
     ) {
 
     @PostMapping("/add-car")
-    fun addCar(@RequestBody car: Car): ResponseEntity<Car> {
-        val car = carCheckUpSystem.addCar(car)
-        return ResponseEntity.ok().body(car)
-    }
-
-    @ExceptionHandler(VinNotUniqueException::class)
-    fun handleVinNotUniqueException(exception: VinNotUniqueException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
+    fun addCar(@RequestBody carRequest: Car): ResponseEntity<Car> {
+        val carResponse = carCheckUpSystem.addCar(carRequest)
+        return ResponseEntity.ok().body(carResponse)
     }
 
     @PostMapping("/add-car-check-up")
     @ResponseBody
-    fun addCarCheckUp(@RequestBody carCheckUp: CarCheckUp): ResponseEntity<CarCheckUp> {
-        val carCheckUp = carCheckUpSystem.addCarCheckUp(carCheckUp)
-        return ResponseEntity.ok().body(carCheckUp)
-    }
-
-    @ExceptionHandler(CarNotFoundException::class)
-    fun handleCarNotFoundException(exception: CarNotFoundException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
+    fun addCarCheckUp(@RequestBody carCheckUpRequest: CarCheckUp): ResponseEntity<CarCheckUp> {
+        val carCheckUpResponse = carCheckUpSystem.addCarCheckUp(carCheckUpRequest)
+        return ResponseEntity.ok().body(carCheckUpResponse)
     }
 
     @GetMapping("/get-car-by-id")
@@ -67,5 +58,18 @@ class CarCheckUpController(
     @GetMapping("/get-all-checkups")
     @ResponseBody
     fun getAllCarCheckUps() = carCheckUpSystem.getAllCheckUps()
+
+    @ExceptionHandler(VinNotUniqueException::class)
+    fun handleVinNotUniqueException(exception: VinNotUniqueException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.message)
+    }
+    @ExceptionHandler(CarIdNotFoundException::class)
+    fun handleCarIdNotFoundException(exception: CarIdNotFoundException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
+    }
+    @ExceptionHandler(CarVinNotFoundException::class)
+    fun handleCarVinNotFoundException(exception: CarVinNotFoundException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
+    }
 
 }
