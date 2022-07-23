@@ -1,17 +1,16 @@
-CREATE TABLE cars (
-    id BIGSERIAL PRIMARY KEY,
-    dateAdded DATE,
-    manufacturer VARCHAR,
-    model VARCHAR,
-    productionYear INT,
-    vin VARCHAR UNIQUE
+CREATE TABLE car (
+    id UUID PRIMARY KEY,
+    date_added DATE,
+    manufacturer TEXT,
+    model TEXT,
+    production_year INT,
+    vin TEXT UNIQUE
 );
-
-CREATE TABLE checkUps (
-    id BIGSERIAL PRIMARY KEY,
-    performedAt TIMESTAMP,
-    workerName VARCHAR,
+CREATE TABLE carCheckUp (
+    id UUID PRIMARY KEY,
+    performed_at TIMESTAMP,
+    worker_name TEXT,
     price INT,
-    carId BIGSERIAL REFERENCES cars(id)
+    car_id UUID CONSTRAINT car_fk REFERENCES car(id)
 );
 

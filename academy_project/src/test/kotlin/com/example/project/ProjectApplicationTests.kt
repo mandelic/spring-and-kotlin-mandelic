@@ -1,6 +1,7 @@
 package com.example.project
 
-import com.example.project.carCheckUpSystem.service.CarCheckUpSystem
+import com.example.project.carCheckUpSystem.car.service.CarService
+import com.example.project.carCheckUpSystem.carCheckUp.service.CarCheckUpService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -16,12 +17,15 @@ class ProjectApplicationTests {
 	private lateinit var mockMvc: MockMvc
 
 	@Autowired
-	private lateinit var carCheckUpSystem: CarCheckUpSystem
+	private lateinit var carService: CarService
+
+    @Autowired
+    private lateinit var carCheckUpService: CarCheckUpService
 
 	@Test
 	fun testGetCheckUps(){
-		val expectedCheckUps = carCheckUpSystem.getAllCheckUps()
-		mockMvc.get("/get-all-checkups")
+		val expectedCheckUps = carCheckUpService.getAllCheckUps()
+		mockMvc.get("/car-check-up")
 			.andExpect {
 				status { is2xxSuccessful() }
 				content { expectedCheckUps }
@@ -30,8 +34,8 @@ class ProjectApplicationTests {
 
 	@Test
 	fun testGetCars(){
-		val expectedCars = carCheckUpSystem.getAllCars()
-		mockMvc.get("/get-all-cars")
+		val expectedCars = carService.getAllCars()
+		mockMvc.get("/car")
 			.andExpect {
 				status { is2xxSuccessful() }
 				content { expectedCars }
@@ -40,8 +44,8 @@ class ProjectApplicationTests {
 
 	@Test
 	fun testCountCheckUps() {
-		val expectedCount = carCheckUpSystem.countCheckUps("Porsche")
-		mockMvc.get("/count-check-ups")
+		val expectedCount = carService.countCheckUpsByManufacturer("Porsche")
+		mockMvc.get("/car/count-check-ups")
 			.andExpect {
 				status { is2xxSuccessful() }
 				content { expectedCount}
@@ -49,13 +53,13 @@ class ProjectApplicationTests {
 	}
 
 	@Test
-	fun testGetCarDetails() {
-		val expectedDetails = carCheckUpSystem.getCarDetails(vin="vin1")
-		mockMvc.get("/get-car-details?vin=vin1")
-			.andExpect {
-				status { is2xxSuccessful() }
-				content { expectedDetails }
-			}
-	}
+	fun testPagedCars() {
+        val expectedResult = carService.getAllCars()
+        mockMvc.get("/car/paged")
+            .andExpect {
+            status { is2xxSuccessful() }
+            content { expectedResult}
+            }
+    }
 
 }
