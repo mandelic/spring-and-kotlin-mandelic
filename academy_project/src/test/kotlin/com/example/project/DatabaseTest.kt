@@ -1,57 +1,57 @@
 package com.example.project
 
-import org.assertj.core.api.Assertions
-import org.junit.Before
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
+import com.example.project.carCheckUpSystem.car.entity.Car
+import com.example.project.carCheckUpSystem.car.repository.CarRepository
+import com.example.project.carCheckUpSystem.carCheckUp.entity.CarCheckUp
+import com.example.project.carCheckUpSystem.carCheckUp.repository.CarCheckUpRepository
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.test.annotation.Commit
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.event.annotation.BeforeTestClass
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
-@JdbcTest
+@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class DatabaseTest {
-    @Autowired
-    lateinit var jdbcTemplate: NamedParameterJdbcTemplate
+class DatabaseTest @Autowired constructor(
+    val carRepository: CarRepository,
+    val carCheckUpRepository: CarCheckUpRepository
+){
 
     @BeforeEach
     fun setUp() {
-        jdbcTemplate.update(
-            "INSERT INTO cars (dateAdded, manufacturer, model, productionYear, vin) VALUES (:dateAdded, :manufacturer, :model, :productionYear, :vin)",
-            mapOf("dateAdded" to LocalDate.now(),
-                  "manufacturer" to "man",
-                  "model" to "mod",
-                  "productionYear" to 2020,
-                  "vin" to "vinTest20")
-        )
+        val car1 = Car(UUID.fromString("32c93a03-bbbf-47e2-a270-d96123d3f16b"), LocalDate.now(), "Seat", "Model1", 2013, "vin1")
+        val car2 = Car(UUID.fromString("4b017174-e69b-4d9f-b801-4149e7fe6708"), LocalDate.now(), "Porsche", "Model2", 2015, "vin2")
+        val cars = listOf(car1, car2)
+        carRepository.saveAll(cars)
+        val carCheckUp1 = CarCheckUp(UUID.randomUUID(), LocalDateTime.now(), "Ante", 1000, car1)
+        val carCheckUp2 = CarCheckUp(UUID.randomUUID(), LocalDateTime.now(), "Ante", 750, car1)
+        val carCheckUp3 = CarCheckUp(UUID.randomUUID(), LocalDateTime.now(), "Ana", 500, car2)
+        val checkUps = listOf(carCheckUp1, carCheckUp2, carCheckUp3)
+        carCheckUpRepository.saveAll(checkUps)
     }
 
     @Test
-    fun test() {
-        Assertions.assertThat(
-            jdbcTemplate.queryForObject(
-                "SELECT vin FROM cars WHERE vin = :vin ",
-                mapOf("vin" to "vinTest20"),
-                String::class.java
-            )
-        ).isEqualTo("vinTest20")
+    fun testFindAllCars() {
+        val allCars = carRepository.findAll()
+        assertThat(allCars.size).isEqualTo(2)
     }
 
     @Test
-    fun testCount() {
-        Assertions.assertThat(
-            jdbcTemplate.queryForObject(
-                "SELECT count(*) FROM cars WHERE vin = :vin",
-                mapOf("vin" to "vinTest20"),
-                Int::class.java
-            )
-        ).isEqualTo(1)
+    fun testFindAllCheckUps() {
+        val allCheckUps = carCheckUpRepository.findAll()
+        assertThat(allCheckUps.size).isEqualTo(3)
+    }
+
+    @Test
+    fun findAllCarsPaged() {
+        val pageable = PageRequest.of(0, 2)
+        val allCars = carRepository.findAll(pageable)
+        assertThat(allCars.totalPages).isEqualTo(1)
+        assertThat(allCars.content[0].model).isEqualTo("Model1")
     }
 }
