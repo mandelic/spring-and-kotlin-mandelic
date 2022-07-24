@@ -24,8 +24,6 @@ class DatabaseTest @Autowired constructor(
 
     @BeforeEach
     fun setUp() {
-        carRepository.deleteAll()
-        carCheckUpRepository.deleteAll()
         val car1 = Car(UUID.fromString("32c93a03-bbbf-47e2-a270-d96123d3f16b"), LocalDate.now(), "Seat", "Model1", 2013, "vin1")
         val car2 = Car(UUID.fromString("4b017174-e69b-4d9f-b801-4149e7fe6708"), LocalDate.now(), "Porsche", "Model2", 2015, "vin2")
         val cars = listOf(car1, car2)

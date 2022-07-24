@@ -28,20 +28,19 @@ class CarService(
         CarDTO(carRepository.save(dto.toCar()))
     }
     fun getCar(id: UUID) = carRepository.findByIdOrNull(id)?.let {car ->
-        CarDetailsDTO(CarDetails(car, isCheckUpNecessary(car.vin), getCheckUpList(car.vin).sortedByDescending { it.performedAt }))
+        CarDetailsDTO(car, isCheckUpNecessary(car.vin), getCheckUpList(car.vin).sortedByDescending { it.performedAt })
     } ?: throw CarIdNotFoundException(id)
 
     fun isCheckUpNecessary(vin: String): Boolean {
-        val today = LocalDateTime.now()
         val car = carRepository.findByVin(vin) ?: throw CarVinNotFoundException(vin)
-        return carCheckUpRepository.findAll().none { it.car.id == car.id && it.performedAt.isAfter(today.minusYears(1))}
+        return carCheckUpRepository.isCheckUpNecessary(car.id)
     }
 
-    fun getCheckUpList(vin: String): List<CarCheckUp> = carCheckUpRepository.findByVin(vin)
+    fun getCheckUpList(vin: String): List<CarCheckUp> = carCheckUpRepository.findByCarVin(vin)
 
     fun countCheckUpsByManufacturer(manufacturer: String): Int {
         val carList = carRepository.findAll().filter { it.manufacturer == manufacturer }
-        return carList.sumOf { carCheckUpRepository.findByVin(it.vin).count() }
+        return carList.sumOf { carCheckUpRepository.findByCarVin(it.vin).count() }
     }
 
     fun getAllCars(pageable: Pageable) = carRepository.findAll(pageable).map { CarDTO(it) }
