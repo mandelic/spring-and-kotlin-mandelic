@@ -33,7 +33,7 @@ class CarService(
         if (carRepository.findByVin(dto.vin) != null) {
                 throw VinNotUniqueException(dto.vin)
         }
-        return carRepository.saveAndFlush(car)
+        return carRepository.save(car)
     }
 
     fun addCarM(dto: AddCarMDTO): Car{
@@ -43,7 +43,7 @@ class CarService(
         if (!carModelRepository.existsByManufacturerAndModel(dto.model.manufacturer, dto.model.model))
             throw ManufacturerModelNotFoundException(dto.model.manufacturer, dto.model.model)
         dto.model.id = carModelRepository.findByManufacturerAndModel(dto.model.manufacturer, dto.model.model).id
-        return carRepository.saveAndFlush(dto.toCar())
+        return carRepository.save(dto.toCar())
     }
 
 
