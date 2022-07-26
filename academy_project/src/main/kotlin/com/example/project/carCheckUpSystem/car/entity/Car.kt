@@ -1,10 +1,9 @@
 package com.example.project.carCheckUpSystem.car.entity
 
+import com.example.project.carCheckUpSystem.carModel.entity.CarModel
 import java.time.LocalDate
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "car")
@@ -15,9 +14,8 @@ class Car(
 
     val dateAdded: LocalDate,
 
-    val manufacturer: String,
-
-    val model: String,
+    @ManyToOne(cascade = [CascadeType.ALL])
+    val carModel: CarModel,
 
     val productionYear: Int,
 

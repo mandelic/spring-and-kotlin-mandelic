@@ -8,5 +8,6 @@ import java.util.*
 
 interface CarRepository : JpaRepository<Car, UUID>{
     fun findByVin(vin: String): Car?
+    fun findByCarModelManufacturer(manufacturer: String): List<Car>
 
 }

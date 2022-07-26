@@ -1,22 +1,21 @@
 package com.example.project.carCheckUpSystem.car.controller.dto
 
 import com.example.project.carCheckUpSystem.car.entity.Car
+import com.example.project.carCheckUpSystem.carModel.controller.dto.CarModelDTO
 import java.time.LocalDate
 import java.util.*
 
 data class CarDTO(
     val id: UUID,
     val dateAdded: LocalDate,
-    val manufacturer: String,
-    val model: String,
+    val model: CarModelDTO,
     val productionYear: Int,
     val vin: String
 ) {
     constructor(car: Car) : this(
         car.id,
         car.dateAdded,
-        car.manufacturer,
-        car.model,
+        CarModelDTO(car.carModel),
         car.productionYear,
         car.vin
     )
