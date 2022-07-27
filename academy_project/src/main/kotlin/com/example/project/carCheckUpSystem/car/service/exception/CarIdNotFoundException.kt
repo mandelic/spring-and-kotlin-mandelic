@@ -1,4 +1,4 @@
-package com.example.project.carCheckUpSystem.carCheckUp.service
+package com.example.project.carCheckUpSystem.car.service.exception
 
 import java.util.*
 

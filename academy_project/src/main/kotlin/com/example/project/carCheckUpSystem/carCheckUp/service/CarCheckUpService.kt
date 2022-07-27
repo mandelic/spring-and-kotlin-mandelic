@@ -1,7 +1,7 @@
 package com.example.project.carCheckUpSystem.carCheckUp.service
 
 import com.example.project.carCheckUpSystem.car.repository.CarRepository
-import com.example.project.carCheckUpSystem.car.service.CarIdNotFoundException
+import com.example.project.carCheckUpSystem.car.service.exception.CarIdNotFoundException
 import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.AddCarCheckUpDTO
 import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.CarCheckUpDTO
 import com.example.project.carCheckUpSystem.carCheckUp.repository.CarCheckUpRepository
@@ -14,7 +14,7 @@ class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
 ) {
     fun addCarCheckUp(dto: AddCarCheckUpDTO): CarCheckUpDTO{
         val carCheckUp = dto.toCarCheckUp { carId ->
-            carRepository.findById(carId).orElse(null) ?: throw CarIdNotFoundException(carId)
+            carRepository.findById(carId).orElseThrow { CarIdNotFoundException(carId) }
         }
         return CarCheckUpDTO(
             carCheckUpRepository.save(carCheckUp)

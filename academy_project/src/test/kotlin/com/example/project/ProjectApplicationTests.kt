@@ -2,13 +2,17 @@ package com.example.project
 
 import com.example.project.carCheckUpSystem.car.service.CarService
 import com.example.project.carCheckUpSystem.carCheckUp.service.CarCheckUpService
+import com.example.project.carCheckUpSystem.carModel.entity.CarModel
+import com.example.project.carCheckUpSystem.carModel.service.CarModelService
 import org.junit.jupiter.api.Test
+import org.mockserver.springtest.MockServerTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
+@MockServerTest
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProjectApplicationTests {
@@ -21,6 +25,9 @@ class ProjectApplicationTests {
 
     @Autowired
     private lateinit var carCheckUpService: CarCheckUpService
+
+	@Autowired
+	private lateinit var carModelService: CarModelService
 
 	@Test
 	fun testGetCheckUps(){

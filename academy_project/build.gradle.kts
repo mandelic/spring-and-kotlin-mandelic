@@ -20,20 +20,6 @@ repositories {
 extra["testcontainersVersion"] = "1.17.3"
 
 dependencies {
-	/*implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.hibernate:hibernate-core:5.6.0.Final")
-	implementation("org.springframework:spring-core:5.3.22")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
-	implementation("org.flywaydb:flyway-core")
-	runtimeOnly("org.postgresql:postgresql")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.testcontainers:junit-jupiter")
-	testImplementation("com.ninja-squad:springmockk:3.1.1")
-	testImplementation("org.testcontainers:postgresql")*/
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -43,6 +29,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
+	testImplementation("org.mock-server:mockserver-spring-test-listener:5.11.2")
 	implementation("org.hibernate:hibernate-core:5.6.0.Final")
 	implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
 }
