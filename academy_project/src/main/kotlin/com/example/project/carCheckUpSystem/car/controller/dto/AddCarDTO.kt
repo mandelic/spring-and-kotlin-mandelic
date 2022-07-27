@@ -7,14 +7,14 @@ import java.util.*
 
 data class AddCarDTO (
     val dateAdded: LocalDate,
-    val model_id: UUID,
+    val modelId: UUID,
     val productionYear: Int,
     val vin: String
 ) {
     fun toCar(modelFetcher: (UUID) -> CarModel): Car {
         return Car(
             dateAdded = dateAdded,
-            carModel = modelFetcher.invoke(model_id),
+            carModel = modelFetcher.invoke(modelId),
             productionYear = productionYear,
             vin = vin)
     }

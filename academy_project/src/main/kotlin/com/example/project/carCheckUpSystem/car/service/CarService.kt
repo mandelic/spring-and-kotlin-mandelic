@@ -28,7 +28,7 @@ class CarService(
 
     fun addCar(dto: AddCarDTO): Car {
         val car = dto.toCar { modelId ->
-            carModelRepository.findById(modelId).orElse(null) ?: throw ModelIdNotFoundException(modelId)
+            carModelRepository.findById(modelId).orElseThrow { ModelIdNotFoundException(modelId) }
         }
         if (carRepository.findByVin(dto.vin) != null) {
                 throw VinNotUniqueException(dto.vin)
@@ -40,10 +40,10 @@ class CarService(
         if (carRepository.findByVin(dto.vin) != null) {
             throw VinNotUniqueException(dto.vin)
         }
-        if (!carModelRepository.existsByManufacturerAndModel(dto.model.manufacturer, dto.model.model))
-            throw ManufacturerModelNotFoundException(dto.model.manufacturer, dto.model.model)
-        dto.model.id = carModelRepository.findByManufacturerAndModel(dto.model.manufacturer, dto.model.model).id
-        return carRepository.save(dto.toCar())
+        if (!carModelRepository.existsByManufacturerAndModel(dto.carModel.manufacturer, dto.carModel.model))
+            throw ManufacturerModelNotFoundException(dto.carModel.manufacturer, dto.carModel.model)
+        val id = carModelRepository.findByManufacturerAndModel(dto.carModel.manufacturer, dto.carModel.model).id
+        return carRepository.save(dto.toCar(id))
     }
 
 

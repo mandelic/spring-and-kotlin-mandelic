@@ -22,7 +22,7 @@ class RestTemplateCarModelService(
     private val carModelRepository: CarModelRepository
 ): CarModelService {
 
-    val log: Logger = LoggerFactory.getLogger(FetchApiData::class.java)
+    val log: Logger = LoggerFactory.getLogger(RestTemplateCarModelService::class.java)
 
     override fun getAllTmp(): List<CarManufacturers> {
         return restTemplate
@@ -32,7 +32,6 @@ class RestTemplateCarModelService(
 
     override fun getAllDb(): List<CarModelDTO> = carModelRepository.findAll().map { CarModelDTO(it) }
 
-    @Scheduled(cron = "@daily")
     fun updateDatabase() {
         log.info("Fetching data and updating the database...")
         val data = restTemplate.getForObject<CarModelResponse>(baseUrl, String::class.java).cars

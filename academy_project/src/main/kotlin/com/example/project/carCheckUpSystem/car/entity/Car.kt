@@ -1,5 +1,6 @@
 package com.example.project.carCheckUpSystem.car.entity
 
+import com.example.project.carCheckUpSystem.carModel.controller.dto.CarModelDTO
 import com.example.project.carCheckUpSystem.carModel.entity.CarModel
 import java.time.LocalDate
 import java.util.*
@@ -14,7 +15,7 @@ class Car(
 
     val dateAdded: LocalDate,
 
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne(cascade = [CascadeType.PERSIST])
     val carModel: CarModel,
 
     val productionYear: Int,

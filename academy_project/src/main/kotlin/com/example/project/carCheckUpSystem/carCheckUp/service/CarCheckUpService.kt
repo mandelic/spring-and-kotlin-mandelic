@@ -14,7 +14,7 @@ class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
 ) {
     fun addCarCheckUp(dto: AddCarCheckUpDTO): CarCheckUpDTO{
         val carCheckUp = dto.toCarCheckUp { carId ->
-            carRepository.findById(carId).orElse(null) ?: throw CarIdNotFoundException(carId)
+            carRepository.findById(carId).orElseThrow { CarIdNotFoundException(carId) }
         }
         return CarCheckUpDTO(
             carCheckUpRepository.save(carCheckUp)

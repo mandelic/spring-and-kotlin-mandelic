@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 
 @SpringBootApplication
-@EnableScheduling
 class ProjectApplication
 
 fun main(args: Array<String>) {
