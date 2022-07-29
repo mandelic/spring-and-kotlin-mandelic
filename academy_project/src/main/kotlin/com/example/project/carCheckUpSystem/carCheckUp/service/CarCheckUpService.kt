@@ -6,7 +6,9 @@ import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.AddCarChec
 import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.CarCheckUpDTO
 import com.example.project.carCheckUpSystem.carCheckUp.repository.CarCheckUpRepository
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
@@ -20,8 +22,11 @@ class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
             carCheckUpRepository.save(carCheckUp)
         )
     }
-    fun getAllCheckUps(): List<CarCheckUpDTO> = carCheckUpRepository.findAll().map { CarCheckUpDTO(it) }
+    fun getAllCheckUps() = carCheckUpRepository.findAll()
 
-    fun getAllCheckUps(pageable: Pageable) = carCheckUpRepository.findAll(pageable).map { CarCheckUpDTO(it)}
+    fun getAllCheckUps(pageable: Pageable) = carCheckUpRepository.findAll( pageable)
+
+    fun getCheckUps(id: UUID) = carCheckUpRepository.findByCarId(id)
+    fun getPagedCheckUps(id: UUID, pageable: Pageable) = carCheckUpRepository.findAllByCarId(id, pageable)
 
 }
