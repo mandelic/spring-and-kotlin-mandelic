@@ -6,6 +6,7 @@ import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.CarCheckUp
 import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.CarCheckUpResourceAssembler
 import com.example.project.carCheckUpSystem.carCheckUp.entity.CarCheckUp
 import com.example.project.carCheckUpSystem.carCheckUp.service.CarCheckUpService
+import com.example.project.carCheckUpSystem.carCheckUp.service.exception.CarCheckUpNotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -52,7 +53,7 @@ class CarCheckUpController(
 
     @GetMapping("/paged")
     fun getAllCarCheckUps(
-        @PageableDefault(sort = ["performedAt"]) pageable: Pageable,
+        pageable: Pageable,
         @RequestParam sort: Sort.Direction?,
         pagedResourceAssembler: PagedResourcesAssembler<CarCheckUp>
     ): ResponseEntity<PagedModel<CarCheckUpResource>> {
@@ -67,16 +68,21 @@ class CarCheckUpController(
     }
 
 
-    @GetMapping("/{carId}")
+    @GetMapping("/car/{carId}")
     fun getCarCheckUp(@PathVariable carId: UUID): ResponseEntity<List<CarCheckUpResource>> {
         val carCheckUpResource = carCheckUpService.getCheckUps(carId).map {resourceAssembler.toModel(it)}
         return ResponseEntity.ok(carCheckUpResource)
     }
 
-    @GetMapping("/paged/{carId}")
+    @GetMapping("/{checkUpId}")
+    fun getCarCheckUpById(@PathVariable checkUpId: UUID): ResponseEntity<CarCheckUpResource> {
+        return ResponseEntity.ok(resourceAssembler.toModel(carCheckUpService.getCheckUpById(checkUpId)))
+    }
+
+    @GetMapping("/car/paged-{carId}")
     fun getPagedCarCheckUp(
         @PathVariable carId: UUID,
-        @PageableDefault(sort = ["performedAt"]) pageable: Pageable,
+        pageable: Pageable,
         @RequestParam sort: Sort.Direction?,
         pagedResourceAssembler: PagedResourcesAssembler<CarCheckUp>
     ): ResponseEntity<PagedModel<CarCheckUpResource>> {
@@ -92,6 +98,11 @@ class CarCheckUpController(
 
     @ExceptionHandler(CarIdNotFoundException::class)
     fun handleCarIdNotFoundException(exception: CarIdNotFoundException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
+    }
+
+    @ExceptionHandler(CarCheckUpNotFoundException::class)
+    fun handleCarCheckUpNotFoundException(exception: CarCheckUpNotFoundException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)
     }
 

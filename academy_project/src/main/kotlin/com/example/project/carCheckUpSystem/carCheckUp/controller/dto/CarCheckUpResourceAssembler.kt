@@ -21,7 +21,7 @@ class CarCheckUpResourceAssembler : RepresentationModelAssemblerSupport<CarCheck
             add(
                 linkTo<CarCheckUpController> {
                     getCarCheckUp(carId)
-                }.withRel("carCheckUp")
+                }.withRel("car")
             )
         }
     }

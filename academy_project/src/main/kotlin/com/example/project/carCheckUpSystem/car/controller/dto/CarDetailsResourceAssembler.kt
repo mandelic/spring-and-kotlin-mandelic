@@ -3,6 +3,7 @@ package com.example.project.carCheckUpSystem.car.controller.dto
 import com.example.project.carCheckUpSystem.car.controller.CarController
 import com.example.project.carCheckUpSystem.car.entity.Car
 import com.example.project.carCheckUpSystem.car.entity.CarDetails
+import com.example.project.carCheckUpSystem.carCheckUp.controller.CarCheckUpController
 import com.example.project.carCheckUpSystem.carModel.entity.CarModel
 import org.springframework.hateoas.IanaLinkRelations
 import org.springframework.hateoas.RepresentationModel
@@ -15,14 +16,19 @@ import java.util.*
 
 @Component
 class CarDetailsResourceAssembler : RepresentationModelAssemblerSupport<CarDetails, CarDetailsResource>(
-    CarController::class.java, CarDetailsResource::class.java
+    CarCheckUpController::class.java, CarDetailsResource::class.java
 ) {
     override fun toModel(entity: CarDetails): CarDetailsResource {
         return createModelWithId(entity.car.id, entity).apply{
             add(
-                linkTo<CarController> {
+                linkTo<CarController>{
                     fetchCarDetails(car.id)
-                }.withRel("carDetails")
+                }.withSelfRel()
+            )
+            add(
+                linkTo<CarCheckUpController> {
+                    getCarCheckUp(car.id)
+                }.withRel("carCheckUps")
             )
         }
     }

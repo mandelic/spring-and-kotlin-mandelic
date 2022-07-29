@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PagedResourcesAssembler
 import org.springframework.hateoas.PagedModel
 import org.springframework.hateoas.CollectionModel
+import org.springframework.hateoas.Link
+import org.springframework.hateoas.UriTemplate
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
