@@ -15,11 +15,14 @@ import org.springframework.data.web.PagedResourcesAssembler
 import org.springframework.data.web.SortDefault
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.PagedModel
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.net.URI
 import java.util.*
 import javax.swing.SortOrder
 
@@ -33,11 +36,7 @@ class CarCheckUpController(
     @PostMapping("/add")
     fun addCarCheckUp(@RequestBody carCheckUp: AddCarCheckUpDTO): ResponseEntity<Unit> {
         val carCheckUpDTO = carCheckUpService.addCarCheckUp(carCheckUp)
-        val location = ServletUriComponentsBuilder
-            .fromCurrentContextPath()
-            .path("/car-check-up/{id}")
-            .buildAndExpand(mapOf("id" to carCheckUpDTO.id))
-            .toUri()
+        val location: URI = linkTo(methodOn(CarCheckUpController::class.java).getCarCheckUpById(carCheckUpDTO.id)).toUri()
         return ResponseEntity.created(location).build()
     }
 
@@ -54,14 +53,11 @@ class CarCheckUpController(
     @GetMapping("/paged")
     fun getAllCarCheckUps(
         pageable: Pageable,
-        @RequestParam sort: Sort.Direction?,
         pagedResourceAssembler: PagedResourcesAssembler<CarCheckUp>
     ): ResponseEntity<PagedModel<CarCheckUpResource>> {
-        val newPageable = if(sort == null) pageable
-                        else PageRequest.of(pageable.pageNumber, pageable.pageSize, Sort.by(sort, "performedAt"))
         return ResponseEntity.ok(
             pagedResourceAssembler.toModel(
-                carCheckUpService.getAllCheckUps(newPageable),
+                carCheckUpService.getAllCheckUps(pageable),
                 resourceAssembler
             )
         )
@@ -83,14 +79,11 @@ class CarCheckUpController(
     fun getPagedCarCheckUp(
         @PathVariable carId: UUID,
         pageable: Pageable,
-        @RequestParam sort: Sort.Direction?,
         pagedResourceAssembler: PagedResourcesAssembler<CarCheckUp>
     ): ResponseEntity<PagedModel<CarCheckUpResource>> {
-        val newPageable = if(sort == null) pageable
-                        else PageRequest.of(pageable.pageNumber, pageable.pageSize, Sort.by(sort, "performedAt"))
         return ResponseEntity.ok(
             pagedResourceAssembler.toModel(
-                carCheckUpService.getPagedCheckUps(carId, newPageable),
+                carCheckUpService.getPagedCheckUps(carId, pageable),
                 resourceAssembler
             )
         )

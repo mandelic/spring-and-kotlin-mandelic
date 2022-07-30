@@ -21,11 +21,6 @@ class CarDetailsResourceAssembler : RepresentationModelAssemblerSupport<CarDetai
     override fun toModel(entity: CarDetails): CarDetailsResource {
         return createModelWithId(entity.car.id, entity).apply{
             add(
-                linkTo<CarController>{
-                    fetchCarDetails(car.id)
-                }.withSelfRel()
-            )
-            add(
                 linkTo<CarCheckUpController> {
                     getCarCheckUp(car.id)
                 }.withRel("carCheckUps")

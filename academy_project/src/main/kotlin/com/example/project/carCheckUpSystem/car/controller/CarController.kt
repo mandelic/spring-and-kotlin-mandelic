@@ -8,12 +8,13 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PagedResourcesAssembler
 import org.springframework.hateoas.PagedModel
 import org.springframework.hateoas.CollectionModel
-import org.springframework.hateoas.Link
-import org.springframework.hateoas.UriTemplate
+import org.springframework.hateoas.server.core.DummyInvocationUtils.methodOn
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.net.URI
 import java.util.*
 
 @RequestMapping("/car")
@@ -26,22 +27,14 @@ class CarController(
     @PostMapping("/add-with-model-id")
     fun addCar(@RequestBody car: AddCarDTO): ResponseEntity<Unit> {
         val carDTO = carService.addCar(car)
-        val location = ServletUriComponentsBuilder
-            .fromCurrentContextPath()
-            .path("/car/{id}")
-            .buildAndExpand(mapOf("id" to carDTO.id))
-            .toUri()
+        val location: URI = linkTo(methodOn(CarController::class.java).fetchCar(carDTO.id)).toUri()
         return ResponseEntity.created(location).build()
     }
 
     @PostMapping("/add-with-model-data")
     fun addCarM(@RequestBody car: AddCarMDTO) : ResponseEntity<Unit> {
         val carMDTO = carService.addCarM(car)
-        val location = ServletUriComponentsBuilder
-            .fromCurrentContextPath()
-            .path("/car/{id}")
-            .buildAndExpand(mapOf("id" to carMDTO.id))
-            .toUri()
+        val location: URI = linkTo(methodOn(CarController::class.java).fetchCar(carMDTO.id)).toUri()
         return ResponseEntity.created(location).build()
     }
 
