@@ -22,9 +22,9 @@ class CarService(
     private val carModelRepository: CarModelRepository
 ) {
 
-    fun getAllCars() = carRepository.findAll().map { CarDTO(it) }
+    fun getAllCars() = carRepository.findAll()
 
-    fun getAllCars(pageable: Pageable) = carRepository.findAll(pageable).map { CarDTO(it) }
+    fun getAllCars(pageable: Pageable) = carRepository.findAll(pageable)
 
     fun addCar(dto: AddCarDTO): Car {
         val car = dto.toCar { modelId ->
@@ -47,8 +47,9 @@ class CarService(
     }
 
 
-    fun getCar(id: UUID) = carRepository.findByIdOrNull(id)?.let { car ->
-        CarDetailsDTO(car, isCheckUpNecessary(car.vin), getCheckUpList(car.vin).sortedByDescending { it.performedAt })
+    fun getCar(id: UUID) = carRepository.findByIdOrNull(id) ?: throw CarIdNotFoundException(id)
+    fun getCarDetails(id: UUID) = carRepository.findByIdOrNull(id)?.let { car ->
+        CarDetailsDTO(car, isCheckUpNecessary(car.vin)).toCarDetails()
     } ?: throw CarIdNotFoundException(id)
 
     fun isCheckUpNecessary(vin: String): Boolean {

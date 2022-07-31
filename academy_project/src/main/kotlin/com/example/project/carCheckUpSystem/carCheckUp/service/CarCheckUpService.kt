@@ -4,9 +4,13 @@ import com.example.project.carCheckUpSystem.car.repository.CarRepository
 import com.example.project.carCheckUpSystem.car.service.exception.CarIdNotFoundException
 import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.AddCarCheckUpDTO
 import com.example.project.carCheckUpSystem.carCheckUp.controller.dto.CarCheckUpDTO
+import com.example.project.carCheckUpSystem.carCheckUp.entity.CarCheckUp
 import com.example.project.carCheckUpSystem.carCheckUp.repository.CarCheckUpRepository
+import com.example.project.carCheckUpSystem.carCheckUp.service.exception.CarCheckUpNotFoundException
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
@@ -20,8 +24,14 @@ class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
             carCheckUpRepository.save(carCheckUp)
         )
     }
-    fun getAllCheckUps(): List<CarCheckUpDTO> = carCheckUpRepository.findAll().map { CarCheckUpDTO(it) }
+    fun getAllCheckUps() = carCheckUpRepository.findAll()
 
-    fun getAllCheckUps(pageable: Pageable) = carCheckUpRepository.findAll(pageable).map { CarCheckUpDTO(it)}
+    fun getAllCheckUps(pageable: Pageable) = carCheckUpRepository.findAll( pageable)
 
+    fun getCheckUps(id: UUID) = carCheckUpRepository.findByCarId(id)
+    fun getPagedCheckUps(id: UUID, pageable: Pageable) = carCheckUpRepository.findAllByCarId(id, pageable)
+    fun getCheckUpById(id: UUID): CarCheckUp {
+        val carCheckUp = carCheckUpRepository.findById(id)
+        return carCheckUp.orElseThrow {CarCheckUpNotFoundException(id)}
+    }
 }

@@ -5,6 +5,7 @@ import com.example.project.carCheckUpSystem.car.repository.CarRepository
 import com.example.project.carCheckUpSystem.carCheckUp.entity.CarCheckUp
 import com.example.project.carCheckUpSystem.carCheckUp.repository.CarCheckUpRepository
 import com.example.project.carCheckUpSystem.carModel.entity.CarModel
+import com.example.project.carCheckUpSystem.carModel.repository.CarModelRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,13 +21,17 @@ import java.util.*
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class DatabaseTest @Autowired constructor(
     val carRepository: CarRepository,
-    val carCheckUpRepository: CarCheckUpRepository
+    val carCheckUpRepository: CarCheckUpRepository,
+    val carModelRepository: CarModelRepository
 ){
 
     @BeforeEach
     fun setUp() {
-        val car1 = Car(UUID.fromString("32c93a03-bbbf-47e2-a270-d96123d3f16b"), LocalDate.now(), CarModel(UUID.randomUUID(), "Porsche", "Model1"), 2013, "vin1")
-        val car2 = Car(UUID.fromString("4b017174-e69b-4d9f-b801-4149e7fe6708"), LocalDate.now(), CarModel(UUID.randomUUID(), "Porsche", "Model2"), 2015, "vin2")
+        val carModel1 = CarModel(UUID.fromString("0ba7e7b1-c875-467f-8e45-c1500cca6d2d"), "Porsche", "Model1")
+        val carModel2 = CarModel(UUID.fromString("0ba7e7b1-c875-467f-8e45-c1500cca6d2d"), "Porsche", "Model2")
+        carModelRepository.saveAll(listOf(carModel1, carModel2))
+        val car1 = Car(UUID.fromString("32c93a03-bbbf-47e2-a270-d96123d3f16b"), LocalDate.now(), carModel1, 2013, "vin1")
+        val car2 = Car(UUID.fromString("4b017174-e69b-4d9f-b801-4149e7fe6708"), LocalDate.now(), carModel2, 2015, "vin2")
         val cars = listOf(car1, car2)
         carRepository.saveAll(cars)
         val carCheckUp1 = CarCheckUp(UUID.randomUUID(), LocalDateTime.now(), "Ante", 1000, car1)
@@ -53,6 +58,6 @@ class DatabaseTest @Autowired constructor(
         val pageable = PageRequest.of(0, 2)
         val allCars = carRepository.findAll(pageable)
         assertThat(allCars.totalPages).isEqualTo(1)
-        assertThat(allCars.content[0].carModel.model).isEqualTo("Model1")
+        assertThat(allCars.content[0].carModel.model).isEqualTo("Model2")
     }
 }
