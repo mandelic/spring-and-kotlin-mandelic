@@ -27,8 +27,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.springframework.security:spring-security-config")
-	implementation("org.springframework.security:spring-security-core")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.hibernate:hibernate-core:5.6.0.Final")
 	implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
