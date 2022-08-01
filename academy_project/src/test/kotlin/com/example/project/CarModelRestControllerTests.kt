@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 @MockServerTest
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class CarModelRestControllerTests @Autowired constructor(
     private val mockMvc: MockMvc,
 ){

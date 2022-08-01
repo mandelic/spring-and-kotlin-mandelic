@@ -43,7 +43,7 @@ class SecurityTests @Autowired constructor(
     }
 
     @Test
-    @WithMockUser(authorities = ["SCOPE_DMIN"])
+    @WithMockUser(authorities = ["SCOPE_ADMIN"])
     fun adminCar() {
         mockMvc.get("/car")
             .andExpect {
