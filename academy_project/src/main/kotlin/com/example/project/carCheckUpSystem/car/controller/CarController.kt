@@ -78,6 +78,14 @@ class CarController(
         return ResponseEntity.ok(countMap)
     }
 
+    @DeleteMapping("/delete/{id}")
+    fun deleteCarCheckUp(
+        @PathVariable id: UUID
+    ): ResponseEntity<String> {
+        carService.delete(id)
+        return ResponseEntity.status(200).body("Successfully deleted Car with ID: ${id}")
+    }
+
     @ExceptionHandler(VinNotUniqueException::class)
     fun handleVinNotUniqueException(exception: VinNotUniqueException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.message)
