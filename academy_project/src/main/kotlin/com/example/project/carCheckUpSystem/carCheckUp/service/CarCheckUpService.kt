@@ -35,10 +35,7 @@ class CarCheckUpService (val carCheckUpRepository: CarCheckUpRepository,
         return carCheckUp.orElseThrow {CarCheckUpNotFoundException(id)}
     }
     fun delete(id: UUID) {
-        try {
-            carCheckUpRepository.deleteById(id)
-        }catch(e: Exception) {
-            throw CarCheckUpNotFoundException(id)
-        }
+        if (!carCheckUpRepository.existsById(id)) throw CarCheckUpNotFoundException(id)
+        carCheckUpRepository.deleteById(id)
     }
 }

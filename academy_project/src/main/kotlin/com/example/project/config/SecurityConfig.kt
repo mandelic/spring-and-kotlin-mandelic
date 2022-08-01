@@ -7,14 +7,9 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.web.servlet.invoke
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
-import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 
@@ -45,31 +40,12 @@ class SecurityConfig {
                 authorize( HttpMethod.GET, "/car-check-up/car/paged-{carId}", hasAnyAuthority("SCOPE_USER", "SCOPE_ADMIN"))
                 authorize(anyRequest, authenticated)
             }
-            formLogin {  }
             oauth2ResourceServer {
                 jwt {}
             }
         }
         return http.build()
     }
-    @Bean
-    fun userDetailsService() : UserDetailsService {
-        return InMemoryUserDetailsManager().apply {
-            createUser(
-                User.withUsername("admin")
-                    .password("{bcrypt}\$2a\$10\$/UzvZhxMLF2OKNobtzVWoOpSikt59gHZHjS0fbXZCrxpjHsfkEZRa") //admin
-                    .authorities("SCOPE_ADMIN").build()
-            )
-            createUser(
-                User.withUsername("user")
-                    .password("{bcrypt}\$2a\$10\$5JzYYSR7WEL41fUL.Z9sO.7QwTMpOpRvmYzS3/kjja5x9Bwh5OZfW") //pass123
-                    .authorities("SCOPE_USER").build()
-            )
-        }
-    }
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
     @Bean
     fun jwtDecoder(

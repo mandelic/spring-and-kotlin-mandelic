@@ -64,11 +64,9 @@ class CarService(
         return carList.sumOf { carCheckUpRepository.findByCarVin(it.vin).count() }
     }
     fun delete(id: UUID) {
-        try {
-            carRepository.deleteById(id)
-        } catch (e: Exception) {
-            throw CarIdNotFoundException(id)
-        }
+        if (!carRepository.existsById(id)) throw CarIdNotFoundException(id)
+        carRepository.deleteById(id)
+
     }
 
 }
