@@ -89,6 +89,14 @@ class CarCheckUpController(
         )
     }
 
+    @DeleteMapping("/delete/{id}")
+    fun deleteCarCheckUp(
+        @PathVariable id: UUID
+    ): ResponseEntity<Void> {
+        carCheckUpService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
+
     @ExceptionHandler(CarIdNotFoundException::class)
     fun handleCarIdNotFoundException(exception: CarIdNotFoundException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.message)

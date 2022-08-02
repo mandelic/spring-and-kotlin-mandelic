@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.get
 
 @MockServerTest
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class ProjectApplicationTests {
 
 	@Autowired
@@ -25,9 +25,6 @@ class ProjectApplicationTests {
 
     @Autowired
     private lateinit var carCheckUpService: CarCheckUpService
-
-	@Autowired
-	private lateinit var carModelService: CarModelService
 
 	@Test
 	fun testGetCheckUps(){

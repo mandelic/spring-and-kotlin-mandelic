@@ -63,5 +63,10 @@ class CarService(
         val carList = carRepository.findByCarModelManufacturer(manufacturer)
         return carList.sumOf { carCheckUpRepository.findByCarVin(it.vin).count() }
     }
+    fun delete(id: UUID) {
+        if (!carRepository.existsById(id)) throw CarIdNotFoundException(id)
+        carRepository.deleteById(id)
+
+    }
 
 }

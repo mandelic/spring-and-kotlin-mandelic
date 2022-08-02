@@ -1,0 +1,24 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://infinum.com
+          jwt-set-uri: http://localhost:8888/jwks.json
+  jpa:
+    open-in-view: false
+  datasource:
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/car-database
+    password: admin
+  flyway:
+    baselineOnMigrate: true
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari:
+          HikariConfig: INFO
+          nodeValue: INFO
+car-model:
+  base-url: https://62d922dd5d893b27b2df0731.mockapi.io/api/v1/cars/1
